@@ -1,5 +1,6 @@
 import express from 'express';
 import prisma from './lib/prisma.js';
+import userRoutes from './routes/userRoutes.js'
 
 const app=express();
 
@@ -7,6 +8,7 @@ const PORT=process.env.PORT || 5000;
 
 app.use(express.json());
 
+app.use("/users",userRoutes);
 
 app.get('/health',async(req,res)=>{
 try{
