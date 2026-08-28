@@ -1,6 +1,8 @@
 import express from 'express';
 import prisma from './lib/prisma.js';
 import userRoutes from './routes/userRoutes.js'
+import agentRoutes from './routes/agentRoutes.js'
+import { checkAgentStatus } from './services/agentMonitor.js';
 
 const app=express();
 
@@ -9,6 +11,8 @@ const PORT=process.env.PORT || 5000;
 app.use(express.json());
 
 app.use("/users",userRoutes);
+
+app.use('/agents',agentRoutes)
 
 app.get('/health',async(req,res)=>{
 try{
@@ -32,4 +36,10 @@ try{
 
 app.listen(PORT,()=>{
     console.log(`Praesto Backend is running on http://localhost:${PORT}`);
+
+    checkAgentStatus();
+
+    setInterval(()=>{
+        checkAgentStatus();
+    },30000);
 });
