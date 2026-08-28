@@ -3,6 +3,7 @@ import prisma from './lib/prisma.js';
 import userRoutes from './routes/userRoutes.js'
 import agentRoutes from './routes/agentRoutes.js'
 import { checkAgentStatus } from './services/agentMonitor.js';
+import projectRoutes from "./routes/projectRoutes.js";
 
 const app=express();
 
@@ -12,7 +13,9 @@ app.use(express.json());
 
 app.use("/users",userRoutes);
 
-app.use('/agents',agentRoutes)
+app.use('/agents',agentRoutes);
+
+app.use('/projects',projectRoutes);
 
 app.get('/health',async(req,res)=>{
 try{
