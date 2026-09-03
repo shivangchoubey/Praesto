@@ -402,7 +402,8 @@ export const ModelName = {
   Project: 'Project',
   Deployment: 'Deployment',
   EnvironmentVariable: 'EnvironmentVariable',
-  DeploymentLog: 'DeploymentLog'
+  DeploymentLog: 'DeploymentLog',
+  GitHubConnection: 'GitHubConnection'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -418,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "agent" | "project" | "deployment" | "environmentVariable" | "deploymentLog"
+    modelProps: "user" | "agent" | "project" | "deployment" | "environmentVariable" | "deploymentLog" | "gitHubConnection"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -866,6 +867,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GitHubConnection: {
+      payload: Prisma.$GitHubConnectionPayload<ExtArgs>
+      fields: Prisma.GitHubConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GitHubConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GitHubConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.GitHubConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GitHubConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.GitHubConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.GitHubConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.GitHubConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GitHubConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.GitHubConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>
+        }
+        update: {
+          args: Prisma.GitHubConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.GitHubConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GitHubConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GitHubConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.GitHubConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.GitHubConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGitHubConnection>
+        }
+        groupBy: {
+          args: Prisma.GitHubConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GitHubConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GitHubConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GitHubConnectionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -941,6 +1016,8 @@ export const ProjectScalarFieldEnum = {
   defaultBranch: 'defaultBranch',
   framework: 'framework',
   visiblity: 'visiblity',
+  installationId: 'installationId',
+  githubRepositoryId: 'githubRepositoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -985,6 +1062,17 @@ export const DeploymentLogScalarFieldEnum = {
 } as const
 
 export type DeploymentLogScalarFieldEnum = (typeof DeploymentLogScalarFieldEnum)[keyof typeof DeploymentLogScalarFieldEnum]
+
+
+export const GitHubConnectionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  installationId: 'installationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GitHubConnectionScalarFieldEnum = (typeof GitHubConnectionScalarFieldEnum)[keyof typeof GitHubConnectionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1285,6 +1373,7 @@ export type GlobalOmitConfig = {
   deployment?: Prisma.DeploymentOmit
   environmentVariable?: Prisma.EnvironmentVariableOmit
   deploymentLog?: Prisma.DeploymentLogOmit
+  gitHubConnection?: Prisma.GitHubConnectionOmit
 }
 
 /* Types for Logging */

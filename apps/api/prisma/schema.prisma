@@ -39,6 +39,8 @@ model User{
   updatedAt DateTime @updatedAt
   agent Agent?
   projects Project[]
+  
+  githubConnection GitHubConnection?
 }
 model Agent{
   id String @id @default(uuid())
@@ -53,6 +55,7 @@ model Agent{
 
   user User @relation(fields: [userId], references: [id], onDelete:Cascade)
   deployments Deployment[]
+  
 }
 
 model Project{
@@ -63,6 +66,9 @@ model Project{
     defaultBranch String
     framework     String?
     visiblity ProjectVisibility
+
+    installationId String?
+    githubRepositoryId String?
     createdAt   DateTime  @default(now())
     updatedAt DateTime    @updatedAt
 
@@ -110,4 +116,13 @@ model DeploymentLog{
   message String
 
   deployment Deployment @relation(fields: [deploymentId],references: [id],onDelete: Cascade)
+}
+model GitHubConnection {
+  id     String @id @default(uuid())
+  userId   String  @unique
+  installationId String @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id],onDelete:Cascade)
 }

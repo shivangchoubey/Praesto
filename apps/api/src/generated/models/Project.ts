@@ -32,6 +32,8 @@ export type ProjectMinAggregateOutputType = {
   defaultBranch: string | null
   framework: string | null
   visiblity: $Enums.ProjectVisibility | null
+  installationId: string | null
+  githubRepositoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +46,8 @@ export type ProjectMaxAggregateOutputType = {
   defaultBranch: string | null
   framework: string | null
   visiblity: $Enums.ProjectVisibility | null
+  installationId: string | null
+  githubRepositoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +60,8 @@ export type ProjectCountAggregateOutputType = {
   defaultBranch: number
   framework: number
   visiblity: number
+  installationId: number
+  githubRepositoryId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,6 +76,8 @@ export type ProjectMinAggregateInputType = {
   defaultBranch?: true
   framework?: true
   visiblity?: true
+  installationId?: true
+  githubRepositoryId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +90,8 @@ export type ProjectMaxAggregateInputType = {
   defaultBranch?: true
   framework?: true
   visiblity?: true
+  installationId?: true
+  githubRepositoryId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +104,8 @@ export type ProjectCountAggregateInputType = {
   defaultBranch?: true
   framework?: true
   visiblity?: true
+  installationId?: true
+  githubRepositoryId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -179,6 +191,8 @@ export type ProjectGroupByOutputType = {
   defaultBranch: string
   framework: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId: string | null
+  githubRepositoryId: string | null
   createdAt: Date
   updatedAt: Date
   _count: ProjectCountAggregateOutputType | null
@@ -212,6 +226,8 @@ export type ProjectWhereInput = {
   defaultBranch?: Prisma.StringFilter<"Project"> | string
   framework?: Prisma.StringNullableFilter<"Project"> | string | null
   visiblity?: Prisma.EnumProjectVisibilityFilter<"Project"> | $Enums.ProjectVisibility
+  installationId?: Prisma.StringNullableFilter<"Project"> | string | null
+  githubRepositoryId?: Prisma.StringNullableFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -227,6 +243,8 @@ export type ProjectOrderByWithRelationInput = {
   defaultBranch?: Prisma.SortOrder
   framework?: Prisma.SortOrderInput | Prisma.SortOrder
   visiblity?: Prisma.SortOrder
+  installationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubRepositoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -245,6 +263,8 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   defaultBranch?: Prisma.StringFilter<"Project"> | string
   framework?: Prisma.StringNullableFilter<"Project"> | string | null
   visiblity?: Prisma.EnumProjectVisibilityFilter<"Project"> | $Enums.ProjectVisibility
+  installationId?: Prisma.StringNullableFilter<"Project"> | string | null
+  githubRepositoryId?: Prisma.StringNullableFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -260,6 +280,8 @@ export type ProjectOrderByWithAggregationInput = {
   defaultBranch?: Prisma.SortOrder
   framework?: Prisma.SortOrderInput | Prisma.SortOrder
   visiblity?: Prisma.SortOrder
+  installationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubRepositoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProjectCountOrderByAggregateInput
@@ -278,6 +300,8 @@ export type ProjectScalarWhereWithAggregatesInput = {
   defaultBranch?: Prisma.StringWithAggregatesFilter<"Project"> | string
   framework?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   visiblity?: Prisma.EnumProjectVisibilityWithAggregatesFilter<"Project"> | $Enums.ProjectVisibility
+  installationId?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
+  githubRepositoryId?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
 }
@@ -289,6 +313,8 @@ export type ProjectCreateInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -304,6 +330,8 @@ export type ProjectUncheckedCreateInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deployments?: Prisma.DeploymentUncheckedCreateNestedManyWithoutProjectInput
@@ -317,6 +345,8 @@ export type ProjectUpdateInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -332,6 +362,8 @@ export type ProjectUncheckedUpdateInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deployments?: Prisma.DeploymentUncheckedUpdateManyWithoutProjectNestedInput
@@ -346,6 +378,8 @@ export type ProjectCreateManyInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -357,6 +391,8 @@ export type ProjectUpdateManyMutationInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -369,6 +405,8 @@ export type ProjectUncheckedUpdateManyInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -391,6 +429,8 @@ export type ProjectCountOrderByAggregateInput = {
   defaultBranch?: Prisma.SortOrder
   framework?: Prisma.SortOrder
   visiblity?: Prisma.SortOrder
+  installationId?: Prisma.SortOrder
+  githubRepositoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -403,6 +443,8 @@ export type ProjectMaxOrderByAggregateInput = {
   defaultBranch?: Prisma.SortOrder
   framework?: Prisma.SortOrder
   visiblity?: Prisma.SortOrder
+  installationId?: Prisma.SortOrder
+  githubRepositoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -415,6 +457,8 @@ export type ProjectMinOrderByAggregateInput = {
   defaultBranch?: Prisma.SortOrder
   framework?: Prisma.SortOrder
   visiblity?: Prisma.SortOrder
+  installationId?: Prisma.SortOrder
+  githubRepositoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -505,6 +549,8 @@ export type ProjectCreateWithoutUserInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deployments?: Prisma.DeploymentCreateNestedManyWithoutProjectInput
@@ -518,6 +564,8 @@ export type ProjectUncheckedCreateWithoutUserInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deployments?: Prisma.DeploymentUncheckedCreateNestedManyWithoutProjectInput
@@ -561,6 +609,8 @@ export type ProjectScalarWhereInput = {
   defaultBranch?: Prisma.StringFilter<"Project"> | string
   framework?: Prisma.StringNullableFilter<"Project"> | string | null
   visiblity?: Prisma.EnumProjectVisibilityFilter<"Project"> | $Enums.ProjectVisibility
+  installationId?: Prisma.StringNullableFilter<"Project"> | string | null
+  githubRepositoryId?: Prisma.StringNullableFilter<"Project"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
 }
@@ -572,6 +622,8 @@ export type ProjectCreateWithoutDeploymentsInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -586,6 +638,8 @@ export type ProjectUncheckedCreateWithoutDeploymentsInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   environmentVariables?: Prisma.EnvironmentVariableUncheckedCreateNestedManyWithoutProjectInput
@@ -614,6 +668,8 @@ export type ProjectUpdateWithoutDeploymentsInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -628,6 +684,8 @@ export type ProjectUncheckedUpdateWithoutDeploymentsInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   environmentVariables?: Prisma.EnvironmentVariableUncheckedUpdateManyWithoutProjectNestedInput
@@ -640,6 +698,8 @@ export type ProjectCreateWithoutEnvironmentVariablesInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
@@ -654,6 +714,8 @@ export type ProjectUncheckedCreateWithoutEnvironmentVariablesInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deployments?: Prisma.DeploymentUncheckedCreateNestedManyWithoutProjectInput
@@ -682,6 +744,8 @@ export type ProjectUpdateWithoutEnvironmentVariablesInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
@@ -696,6 +760,8 @@ export type ProjectUncheckedUpdateWithoutEnvironmentVariablesInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deployments?: Prisma.DeploymentUncheckedUpdateManyWithoutProjectNestedInput
@@ -708,6 +774,8 @@ export type ProjectCreateManyUserInput = {
   defaultBranch: string
   framework?: string | null
   visiblity: $Enums.ProjectVisibility
+  installationId?: string | null
+  githubRepositoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -719,6 +787,8 @@ export type ProjectUpdateWithoutUserInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deployments?: Prisma.DeploymentUpdateManyWithoutProjectNestedInput
@@ -732,6 +802,8 @@ export type ProjectUncheckedUpdateWithoutUserInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deployments?: Prisma.DeploymentUncheckedUpdateManyWithoutProjectNestedInput
@@ -745,6 +817,8 @@ export type ProjectUncheckedUpdateManyWithoutUserInput = {
   defaultBranch?: Prisma.StringFieldUpdateOperationsInput | string
   framework?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   visiblity?: Prisma.EnumProjectVisibilityFieldUpdateOperationsInput | $Enums.ProjectVisibility
+  installationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubRepositoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -797,6 +871,8 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   defaultBranch?: boolean
   framework?: boolean
   visiblity?: boolean
+  installationId?: boolean
+  githubRepositoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -813,6 +889,8 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   defaultBranch?: boolean
   framework?: boolean
   visiblity?: boolean
+  installationId?: boolean
+  githubRepositoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -826,6 +904,8 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   defaultBranch?: boolean
   framework?: boolean
   visiblity?: boolean
+  installationId?: boolean
+  githubRepositoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -839,11 +919,13 @@ export type ProjectSelectScalar = {
   defaultBranch?: boolean
   framework?: boolean
   visiblity?: boolean
+  installationId?: boolean
+  githubRepositoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "repositoryName" | "repositoryUrl" | "defaultBranch" | "framework" | "visiblity" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "repositoryName" | "repositoryUrl" | "defaultBranch" | "framework" | "visiblity" | "installationId" | "githubRepositoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deployments?: boolean | Prisma.Project$deploymentsArgs<ExtArgs>
@@ -872,6 +954,8 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     defaultBranch: string
     framework: string | null
     visiblity: $Enums.ProjectVisibility
+    installationId: string | null
+    githubRepositoryId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["project"]>
@@ -1307,6 +1391,8 @@ export interface ProjectFieldRefs {
   readonly defaultBranch: Prisma.FieldRef<"Project", 'String'>
   readonly framework: Prisma.FieldRef<"Project", 'String'>
   readonly visiblity: Prisma.FieldRef<"Project", 'ProjectVisibility'>
+  readonly installationId: Prisma.FieldRef<"Project", 'String'>
+  readonly githubRepositoryId: Prisma.FieldRef<"Project", 'String'>
   readonly createdAt: Prisma.FieldRef<"Project", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Project", 'DateTime'>
 }

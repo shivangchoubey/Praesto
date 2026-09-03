@@ -4,6 +4,8 @@ import userRoutes from './routes/userRoutes.js'
 import agentRoutes from './routes/agentRoutes.js'
 import { checkAgentStatus } from './services/agentMonitor.js';
 import projectRoutes from "./routes/projectRoutes.js";
+import githubRoutes from "./routes/githubRoutes.js";
+
 
 const app=express();
 
@@ -16,6 +18,8 @@ app.use("/users",userRoutes);
 app.use('/agents',agentRoutes);
 
 app.use('/projects',projectRoutes);
+
+app.use('/github',githubRoutes);
 
 app.get('/health',async(req,res)=>{
 try{

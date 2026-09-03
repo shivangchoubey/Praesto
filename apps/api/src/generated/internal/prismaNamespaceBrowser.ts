@@ -56,7 +56,8 @@ export const ModelName = {
   Project: 'Project',
   Deployment: 'Deployment',
   EnvironmentVariable: 'EnvironmentVariable',
-  DeploymentLog: 'DeploymentLog'
+  DeploymentLog: 'DeploymentLog',
+  GitHubConnection: 'GitHubConnection'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -111,6 +112,8 @@ export const ProjectScalarFieldEnum = {
   defaultBranch: 'defaultBranch',
   framework: 'framework',
   visiblity: 'visiblity',
+  installationId: 'installationId',
+  githubRepositoryId: 'githubRepositoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -155,6 +158,17 @@ export const DeploymentLogScalarFieldEnum = {
 } as const
 
 export type DeploymentLogScalarFieldEnum = (typeof DeploymentLogScalarFieldEnum)[keyof typeof DeploymentLogScalarFieldEnum]
+
+
+export const GitHubConnectionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  installationId: 'installationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GitHubConnectionScalarFieldEnum = (typeof GitHubConnectionScalarFieldEnum)[keyof typeof GitHubConnectionScalarFieldEnum]
 
 
 export const SortOrder = {

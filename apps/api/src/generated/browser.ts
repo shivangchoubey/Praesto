@@ -47,3 +47,8 @@ export type EnvironmentVariable = Prisma.EnvironmentVariableModel
  * 
  */
 export type DeploymentLog = Prisma.DeploymentLogModel
+/**
+ * Model GitHubConnection
+ * 
+ */
+export type GitHubConnection = Prisma.GitHubConnectionModel

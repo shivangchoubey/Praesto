@@ -1,35 +1,67 @@
 import prisma from '../lib/prisma.js';
+import { createInstallationAccessToken, getInstallationRepositories, getInstallationRepositoriesById } from '../services/githubService.js';
 
 export const createProject = async (req,res) => {
     try{
         const{
-            userId,
-            repositoryName,
-            repositoryUrl,
-            defaultBranch,
+            githubRepositoryId,
             framework,
             visiblity
         } = req.body;
-        const project = await prisma.project.create(
-            {
-                data:{
-                    userId,
-                    repositoryName,
-                    repositoryUrl,
-                    defaultBranch,
-                    framework,
-                    visiblity
-                }
+        if(!githubRepositoryId){
+            return res.status(400).json({
+                message:"Github repository is required"
             });
-            res.status(201).json({
-                message:"Project created successfully",
-                project
-            });
+        }
 
+        const userId=req.user.userId;
+
+        const githubConnection=await prisma.gitHubConnection.findUnique({
+            where:{
+                userId
+            }
+        });
+        if(!githubConnection){
+            return res.status(404).json({
+                message:"Github account is not connected"
+            });
+        }
+
+        const installationToken=await createInstallationAccessToken(
+            githubConnection.installationId
+        );
+
+        const repository = await getInstallationRepositoriesById(
+            installationToken.token,
+            githubRepositoryId
+        );
+        if(!repository){
+            return res.status(403).json({
+                message:"Repository is not accessible"
+            });
+        }
+
+        const project = await prisma.project.create({
+            data:{
+                userId,
+                repositoryName:repository.name,
+                repositoryUrl:repository.html_url,
+                defaultBranch:repository.default_branch,
+                framework,
+                visiblity,
+                installationId:githubConnection.installationId,
+                githubRepositoryId:String(repository.id)
+            }
+        });
+
+        return res.status(201).json({
+            message:"Project created successfully",
+            project
+        });
     }catch(error){
         console.error("Failed to create project",error);
-        
-        res.status(500).json({
+
+        return res.status(500).json({
             message:"Failed to create Project"
         });
     }
@@ -37,7 +69,7 @@ export const createProject = async (req,res) => {
 
 export const getProjects = async (req,res) =>{
     try{
-        const {userId}=req.query;
+        const userId=req.user.userId;
         const projects = await prisma.project.findMany(
             {
                 where:{
@@ -59,7 +91,7 @@ export const getProjects = async (req,res) =>{
 export const getProject = async (req,res) =>{
     try{
         const {id}= req.params;
-        const {userId}=req.query;
+        const userId=req.user.userId;
         const project= await prisma.project.findFirst({
             where:{
                 id,
@@ -86,7 +118,8 @@ export const getProject = async (req,res) =>{
 export const updateProject = async (req,res) =>{
     try{
         const {id}=req.params;
-        const {userId,repositoryName,repositoryUrl,defaultBranch,framework,visiblity}=req.body;
+        const {framework,visiblity}=req.body;
+        userId=req.user.userId;
 
         const existingProject= await prisma.project.findFirst({
            where:{
@@ -107,9 +140,6 @@ export const updateProject = async (req,res) =>{
                 id
             },
             data:{
-                repositoryName,
-                repositoryUrl,
-                defaultBranch,
                 framework,
                 visiblity
             }
@@ -129,7 +159,7 @@ export const updateProject = async (req,res) =>{
 export const deleteProject = async (req,res)=> {
     try{
         const {id}= req.params;
-        const {userId}=req.query;
+        const userId=req.user.userId;
         const existingProject= await prisma.project.findFirst({
             where:{
                 id,
