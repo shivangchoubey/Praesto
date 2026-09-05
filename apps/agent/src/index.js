@@ -4,7 +4,6 @@
 
 
     const API_URL="http://localhost:5000";
-    const userId="be057b20-6634-4408-a936-0ef4f8f281bb";
 
     const DATA_FILE=path.join(
         process.cwd(),
@@ -21,12 +20,6 @@
     };
 
 
-
-
-    // const data= await response.json();
-
-    // console.log(data);
-
     const saveAgentData = async(data)=>{
         await fs.writeFile(
             DATA_FILE,
@@ -36,41 +29,58 @@
         
     };
 
-    const registerAgentData = async ()=>{
-        const response= await fetch(`${API_URL}/agents`,{
+    const machineName=os.hostname();
+    const operatingSystem=os.platform();
+    const version="1.0.0";
+
+    const registerAgentData = async (enrollmentToken)=>{
+        const response= await fetch(`${API_URL}/agents/register`,{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
         },
         body:JSON.stringify({
-            userId,
+            enrollmentToken,
             machineName,
             operatingSystem,
             version,
         })
     });
         if(!response.ok){
-            throw new Error(`Agent registration failed: ${response.status}`);
+            const errorData=await response.json();
+            throw new Error(errorData.message || `Agent registration failed: ${response.status}`);
         }
         const data = await response.json();
+
+        console.log("Registration response:", data);
+
         await saveAgentData({
-            agentId:data.agent.id
+            agentId:data.agent.id,
+            token: data.token
+
         });
-        return data.agent;
+        return data;
+
+        
     };
 
-    const sendHeartbeat = async(agentId)=>{
+    const sendHeartbeat = async(agentToken)=>{
         try{
-            const response= await fetch(`${API_URL}/agents/${agentId}/heartbeat`,
+            const response= await fetch(`${API_URL}/agents/heartbeat`,
                 {
-                    method:"PATCH"
+                    method:"PATCH",
+                    headers:{
+                        Authorization: `Bearer ${agentToken}`
+                    }
                 }
             );
 
             if(!response.ok){
-                throw new Error(`Heartbeat failed: ${response.status}`);
+                const errorData=await response.json();
+                throw new Error(errorData.message || `Heartbeat failed: ${response.status}`);
             }
             const data = await response.json();
+
             console.log("Heartbeat Sent: ",
                 data.agent.lastHeartbeat
             );
@@ -79,28 +89,38 @@
         }
     };
 
-    const machineName=os.hostname();
-    const operatingSystem=os.platform();
-    const version="1.0.0";
+    
 
     const agentData = await loadAgentData();
 
     let agent;
 
-    if(agentData.agentId){
+    if(agentData.agentId && agentData.token){
         console.log("Existing Agent is found",agentData.agentId);
         agent = {
-            id:agentData.agentId
+            id:agentData.agentId,
+            token:agentData.token
         };
     }else{
-        console.log("No Existing Agent is found, Registering.....");
+        console.log("No Existing Agent is found.");
 
-        agent= await registerAgentData();
+        const enrollmentToken = process.env.PRAESTO_ENROLLMENT_TOKEN;
+        if(!enrollmentToken){
+            throw new Error(
+                "PRAESTO_ENROLLMENT_TOKEN is required to register the Agent"
+            );
+        }
+        const registrationData= await registerAgentData(enrollmentToken);
+
+        agent= {
+            id:registrationData.agent.id,
+            token:registrationData.token
+        }
         console.log("Agent Registered successfully",agent.id);
     }
 
-    await sendHeartbeat(agent.id);
+    await sendHeartbeat(agent.token);
 
     setInterval(()=>{
-        sendHeartbeat(agent.id);
+        sendHeartbeat(agent.token);
     },30000);

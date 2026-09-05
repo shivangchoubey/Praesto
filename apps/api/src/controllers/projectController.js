@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma.js';
-import { createInstallationAccessToken, getInstallationRepositories, getInstallationRepositoriesById } from '../services/githubService.js';
+import { createInstallationAccessToken, getInstallationRepositoriesById } from '../services/githubService.js';
 
 export const createProject = async (req,res) => {
     try{
@@ -119,7 +119,7 @@ export const updateProject = async (req,res) =>{
     try{
         const {id}=req.params;
         const {framework,visiblity}=req.body;
-        userId=req.user.userId;
+        const userId=req.user.userId;
 
         const existingProject= await prisma.project.findFirst({
            where:{
