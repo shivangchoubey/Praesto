@@ -194,3 +194,27 @@ export const getGitHubConnectionByUserId = async (userId)=>{
         }
     });
 };
+
+export const getLatestCommitSha = async(installationToken,
+    repositoryFullName,
+    branch
+) =>{
+    const response = await fetch(`https://api.github.com/repos/${repositoryFullName}/commits/${branch}`,
+        {
+            headers:{
+                Authorization:`Bearer ${installationToken}`,
+                Accept:"application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28"
+            }
+        }
+    );
+    if(!response.ok) {
+        throw new Error(
+           `Failed to fetch latest commit: ${response.status}` 
+        );
+    }
+
+    const commit= await response.json();
+    return commit.sha;
+};
+
