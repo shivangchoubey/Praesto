@@ -1,6 +1,7 @@
     import os from 'os';
     import fs from 'fs/promises';
     import path from 'path';
+import { checkoutDeployment } from './services/gitService.js';
 
 
     const API_URL="http://localhost:5000";
@@ -131,6 +132,18 @@
         console.log("Repository:",
             deploymentData.project.repositoryName
         );
+        try{
+            const result=await checkoutDeployment({
+                projectId:deploymentData.deployment.projectId,
+                repositoryUrl:deploymentData.project.repositoryUrl,
+                commitHash:deploymentData.deployment.commitHash,
+                installationToken:deploymentData.github.installationToken
+            });
+            
+            console.log("Deployment workspace ready:",result.workspacePath);
+        }catch(error){
+            console.error("Git Deployment preparation failed:",error.message);
+        }
     };
 
     const agentData = await loadAgentData();
