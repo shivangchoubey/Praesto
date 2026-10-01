@@ -89,7 +89,49 @@
         }
     };
 
-    
+    const checkForDeployment= async (agentToken)=>{
+        try{
+
+            const response=await fetch(`${API_URL}/agents/deployments/next`,
+                {
+                    method:"GET",
+                    headers:{
+                        Authorization: `Bearer ${agentToken}`
+                    }
+                });
+                if(response.status===204){
+                    return null;
+                }
+                if(!response.ok){
+                    const errorData=await response.json();
+                    throw new Error(
+                        errorData.message || `Deploymnet check failed: ${response.status}`
+                    );
+                }
+                return await response.json();
+        }catch(error){
+            console.error("Deployment check error:",
+                error.message
+            );
+            return null;
+        }
+    };
+    const pollForDeployment= async (agentToken)=>{
+        const deploymentData=await checkForDeployment(agentToken);
+
+        if(!deploymentData){
+            return;
+        }
+        console.log("Deployment received:",
+            deploymentData.deployment.id
+        );
+        console.log("Commit:",
+            deploymentData.deployment.commitHash
+        );
+        console.log("Repository:",
+            deploymentData.project.repositoryName
+        );
+    };
 
     const agentData = await loadAgentData();
 
@@ -124,3 +166,8 @@
     setInterval(()=>{
         sendHeartbeat(agent.token);
     },30000);
+
+    await pollForDeployment(agent.token);
+    setInterval(()=>{
+        pollForDeployment(agent.token);
+    },5000);

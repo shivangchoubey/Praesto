@@ -6,6 +6,8 @@ import {
     generateAgentToken
 } from "../services/authService.js";
 
+import { createInstallationAccessToken } from "../services/githubService.js";
+
 import authConfig from "../config/auth.js";
 
 export const generateEnrollmentToken = async (req, res) => {
@@ -167,3 +169,85 @@ export const updateHeartbeat = async (req, res) => {
         });
     }
 };
+
+export const getNextDeployment = async (req,res)=>{
+    try{
+        const agentId=req.agent.agentId;
+        const userId=req.agent.userId;
+
+        const deployment= await prisma.deployment.findFirst({
+            where:{
+                agentId,
+                status:"PENDING",
+                project:{
+                    userId
+                }
+            },
+            orderBy:{
+                createdAt:"asc"
+            },
+            include:{
+                project:{
+                    include:{
+                        environmentVariables:true
+                    }
+                }
+            }
+        });
+        if(!deployment){
+           return  res.status(204).send();
+        }
+
+        const gitHubConnection=await prisma.gitHubConnection.findUnique({
+            where:{
+                userId
+            }
+        });
+        if(!gitHubConnection){
+            return res.status(409).json({
+                message:"GitHub account is not connected"
+            });
+        }
+
+        const installationToken=await createInstallationAccessToken(
+            gitHubConnection.installationId
+        );
+        const updateDeployment= await prisma.deployment.update({
+            where:{
+                id:deployment.id
+            },
+            data:{
+                status:"BUILDING",
+                startedAt:new Date()
+            }
+        });
+
+        return res.json({
+            deployment:{
+                id:updateDeployment.id,
+                projectId:updateDeployment.projectId,
+                commitHash:updateDeployment.commitHash,
+                status:updateDeployment.status,
+                startedAt:updateDeployment.startedAt
+            },
+            project:{
+                id:deployment.project.id,
+                repositoryUrl:deployment.project.repositoryUrl,
+                repositoryName:deployment.project.repositoryName,
+                defaultBranch:deployment.project.defaultBranch,
+                framework:deployment.project.framework,
+                environmentVariables:deployment.project.environmentVariables
+            },
+            github:{
+                installationToken:installationToken.token
+            }
+        });
+    } catch(error){
+        console.error("Failed to fetch next deployment", error);
+
+        return res.status(500).json({
+            message:"Failed to fetch next deployment"
+        });
+
+    }
+}
