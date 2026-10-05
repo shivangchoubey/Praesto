@@ -61,7 +61,27 @@ export const exchangeCodeForToken = async (code) => {
         }
     );
 
-    const data = await response.json();
+    const responseText = await response.text();
+
+    let data;
+
+    try {
+        data = JSON.parse(responseText);
+    } catch {
+        console.error(
+            "GitHub token exchange returned non-JSON response:",
+            {
+                status: response.status,
+                contentType: response.headers.get("content-type"),
+                responseUrl: response.url,
+                bodyPreview: responseText.slice(0, 500)
+            }
+        );
+
+        throw new Error(
+            `GitHub token exchange returned non-JSON response: ${response.status}`
+        );
+    }
 
     if (!response.ok || data.error) {
         console.error("GitHub token exchange error:", {

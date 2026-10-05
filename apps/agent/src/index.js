@@ -2,6 +2,7 @@
     import fs from 'fs/promises';
     import path from 'path';
 import { checkoutDeployment } from './services/gitService.js';
+import { buildDockerImage } from './services/dockerService.js';
 
 
     const API_URL="http://localhost:5000";
@@ -117,22 +118,78 @@ import { checkoutDeployment } from './services/gitService.js';
             return null;
         }
     };
+    const sendDeploymentLog=async (agentToken,deploymentId,level,message)=>{
+        try{
+            await fetch(
+                `${API_URL}/agents/deployments/${deploymentId}/logs`,
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json",
+                        Authorization:`Bearer ${agentToken}`
+                    },
+                    body:JSON.stringify({
+                        level,
+                        message:message.trim()
+                    })
+                }
+            );
+        }catch(error){
+            console.error("Failed to send deployment log:",
+                error
+            );
+        }
+    };
+    const updateDeploymentStatus= async(
+        agentToken,
+        deploymentId,
+        status
+    )=>{
+        try{
+            await fetch(
+                `${API_URL}/agents/deployments/${deploymentId}/status`,
+                {
+                    method:"PATCH",
+                    headers:{
+                        "Content-Type":"application/json",
+                        Authorization:`Bearer ${agentToken}`
+                    },
+                    body:JSON.stringify({
+                        status
+                    })
+                }
+            );
+        }catch(error){
+            console.error("Failed to update deployment status:",
+                error
+            );
+        }
+    };
+    let deploymentInProgress=false;
     const pollForDeployment= async (agentToken)=>{
+        if(deploymentInProgress){
+            return;
+        }
         const deploymentData=await checkForDeployment(agentToken);
 
         if(!deploymentData){
             return;
         }
-        console.log("Deployment received:",
-            deploymentData.deployment.id
-        );
-        console.log("Commit:",
-            deploymentData.deployment.commitHash
-        );
-        console.log("Repository:",
-            deploymentData.project.repositoryName
-        );
+        deploymentInProgress=true;
+        const deploymentId=deploymentData.deployment.id;
         try{
+            console.log("Deployment received:",
+                deploymentId
+            );
+            console.log("Commit:",
+                deploymentData.deployment.commitHash
+            );
+            console.log("Repository:",
+                deploymentData.project.repositoryName
+            );
+
+            await sendDeploymentLog(agentToken,deploymentId,"INFO","Deployment recieved");
+        
             const result=await checkoutDeployment({
                 projectId:deploymentData.deployment.projectId,
                 repositoryUrl:deploymentData.project.repositoryUrl,
@@ -141,8 +198,25 @@ import { checkoutDeployment } from './services/gitService.js';
             });
             
             console.log("Deployment workspace ready:",result.workspacePath);
+            await sendDeploymentLog(agentToken,deploymentId,"INFO",`Repository checked out at commit ${result.commitHash}`);
+            
+            const dockerResult=await buildDockerImage({
+                workspacePath:result.workspacePath,
+                deploymentId,
+                onLog:(message)=>{
+                    sendDeploymentLog(agentToken,deploymentId,"INFO",message);
+                }
+            });
+            console.log("Docker image ready:",dockerResult.imageTag);
+            await sendDeploymentLog(agentToken,deploymentId,"INFO",`Docker image ready: ${dockerResult.imageTag}`);
+
         }catch(error){
-            console.error("Git Deployment preparation failed:",error.message);
+            console.error("Deployment execution failed",error.message);
+            await sendDeploymentLog(agentToken,deploymentId,"ERROR",error.message);
+
+            await updateDeploymentStatus(agentToken,deploymentId,"FAILED");
+        } finally{
+            deploymentInProgress=false;
         }
     };
 

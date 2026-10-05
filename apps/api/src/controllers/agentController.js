@@ -9,6 +9,8 @@ import {
 import { createInstallationAccessToken } from "../services/githubService.js";
 
 import authConfig from "../config/auth.js";
+import { stat } from "node:fs";
+import { error } from "node:console";
 
 export const generateEnrollmentToken = async (req, res) => {
     try {
@@ -251,3 +253,129 @@ export const getNextDeployment = async (req,res)=>{
 
     }
 }
+
+export const updateDeploymentStatus= async (req,res)=>{
+    try{
+        const {deploymentId}=req.params;
+        const {status}= req.body;
+
+        const allowedStatuses=[
+            "BUILDING",
+            "RUNNING",
+            "FAILED",
+            "OFFLINE"
+        ];
+        if(!allowedStatuses){
+            return res.status(400).json({
+                message:"Invalid deployment status"
+            });
+        }
+
+        const deployment=await prisma.deployment.findFirst({
+            where:{
+                id:deploymentId,
+                agentId:req.agent.agentId
+            }
+        });
+        if(!deployment){
+            return res.status(404).json({
+                message:"Deployment not found"
+            });
+        }
+
+        const now=new Date();
+        const data={
+            status
+        };
+        if(status==="BUILDING" && !deployment.startedAt){
+            data.startedAt=now;
+        }
+        if(status==="FAILED"||status==="OFFLINE"){
+            data.completedAt=now;
+            if(deployment.startedAt){
+                data.duration=Math.max(0,Math.floor(now.getTime()-deployment.startedAt.getTime())/1000);
+            }
+
+        }
+
+        const updateDeployment=await prisma.deployment.update({
+            where:{
+                id:deployment.id
+            },
+            data
+        });
+
+        return res.json({
+            message:"Deployment status updated",
+            deployment:updateDeployment
+        });
+    }catch(error){
+        console.error("Failed to update deployment status",error);
+        return res.status(500).json({
+            message:"Failed to update deployment status"
+        });
+    }
+};
+
+export const createDeploymentLog = async (req, res) => {
+    try {
+        const { deploymentId } = req.params;
+        const { level, message } = req.body;
+        const agentId = req.agent.agentId;
+
+        if (!level) {
+            return res.status(400).json({
+                message: "Log level is required"
+            });
+        }
+
+        if (!["INFO", "WARN", "ERROR"].includes(level)) {
+            return res.status(400).json({
+                message: "Invalid log level"
+            });
+        }
+
+        if (!message || !message.trim()) {
+            return res.status(400).json({
+                message: "Log message is required"
+            });
+        }
+
+        const deployment = await prisma.deployment.findFirst({
+            where: {
+                id: deploymentId,
+                agentId
+            }
+        });
+
+        if (!deployment) {
+            return res.status(404).json({
+                message: "Deployment not found"
+            });
+        }
+
+        const deploymentLog = await prisma.deploymentLog.create({
+            data: {
+                deploymentId,
+                level,
+                message: message.trim()
+            }
+        });
+
+        return res.status(201).json({
+            message: "Deployment log created successfully",
+            log: deploymentLog
+        });
+
+    } catch (error) {
+        console.error("Failed to create deployment log", error);
+
+        if (res.headersSent) {
+            return;
+        }
+
+        return res.status(500).json({
+            message: "Failed to create deployment log"
+        });
+    }
+};
