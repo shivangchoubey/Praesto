@@ -27,10 +27,14 @@ export type AggregateDeployment = {
 }
 
 export type DeploymentAvgAggregateOutputType = {
+  containerPort: number | null
+  hostPort: number | null
   duration: number | null
 }
 
 export type DeploymentSumAggregateOutputType = {
+  containerPort: number | null
+  hostPort: number | null
   duration: number | null
 }
 
@@ -41,6 +45,10 @@ export type DeploymentMinAggregateOutputType = {
   commitHash: string | null
   status: $Enums.DeploymentStatus | null
   publicUrl: string | null
+  containerId: string | null
+  containerName: string | null
+  containerPort: number | null
+  hostPort: number | null
   startedAt: Date | null
   completedAt: Date | null
   duration: number | null
@@ -54,6 +62,10 @@ export type DeploymentMaxAggregateOutputType = {
   commitHash: string | null
   status: $Enums.DeploymentStatus | null
   publicUrl: string | null
+  containerId: string | null
+  containerName: string | null
+  containerPort: number | null
+  hostPort: number | null
   startedAt: Date | null
   completedAt: Date | null
   duration: number | null
@@ -67,6 +79,10 @@ export type DeploymentCountAggregateOutputType = {
   commitHash: number
   status: number
   publicUrl: number
+  containerId: number
+  containerName: number
+  containerPort: number
+  hostPort: number
   startedAt: number
   completedAt: number
   duration: number
@@ -76,10 +92,14 @@ export type DeploymentCountAggregateOutputType = {
 
 
 export type DeploymentAvgAggregateInputType = {
+  containerPort?: true
+  hostPort?: true
   duration?: true
 }
 
 export type DeploymentSumAggregateInputType = {
+  containerPort?: true
+  hostPort?: true
   duration?: true
 }
 
@@ -90,6 +110,10 @@ export type DeploymentMinAggregateInputType = {
   commitHash?: true
   status?: true
   publicUrl?: true
+  containerId?: true
+  containerName?: true
+  containerPort?: true
+  hostPort?: true
   startedAt?: true
   completedAt?: true
   duration?: true
@@ -103,6 +127,10 @@ export type DeploymentMaxAggregateInputType = {
   commitHash?: true
   status?: true
   publicUrl?: true
+  containerId?: true
+  containerName?: true
+  containerPort?: true
+  hostPort?: true
   startedAt?: true
   completedAt?: true
   duration?: true
@@ -116,6 +144,10 @@ export type DeploymentCountAggregateInputType = {
   commitHash?: true
   status?: true
   publicUrl?: true
+  containerId?: true
+  containerName?: true
+  containerPort?: true
+  hostPort?: true
   startedAt?: true
   completedAt?: true
   duration?: true
@@ -216,6 +248,10 @@ export type DeploymentGroupByOutputType = {
   commitHash: string
   status: $Enums.DeploymentStatus
   publicUrl: string | null
+  containerId: string | null
+  containerName: string | null
+  containerPort: number | null
+  hostPort: number | null
   startedAt: Date | null
   completedAt: Date | null
   duration: number | null
@@ -252,6 +288,10 @@ export type DeploymentWhereInput = {
   commitHash?: Prisma.StringFilter<"Deployment"> | string
   status?: Prisma.EnumDeploymentStatusFilter<"Deployment"> | $Enums.DeploymentStatus
   publicUrl?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerId?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerName?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerPort?: Prisma.IntNullableFilter<"Deployment"> | number | null
+  hostPort?: Prisma.IntNullableFilter<"Deployment"> | number | null
   startedAt?: Prisma.DateTimeNullableFilter<"Deployment"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Deployment"> | Date | string | null
   duration?: Prisma.IntNullableFilter<"Deployment"> | number | null
@@ -268,6 +308,10 @@ export type DeploymentOrderByWithRelationInput = {
   commitHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publicUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  containerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  containerName?: Prisma.SortOrderInput | Prisma.SortOrder
+  containerPort?: Prisma.SortOrderInput | Prisma.SortOrder
+  hostPort?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   duration?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -287,6 +331,10 @@ export type DeploymentWhereUniqueInput = Prisma.AtLeast<{
   commitHash?: Prisma.StringFilter<"Deployment"> | string
   status?: Prisma.EnumDeploymentStatusFilter<"Deployment"> | $Enums.DeploymentStatus
   publicUrl?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerId?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerName?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerPort?: Prisma.IntNullableFilter<"Deployment"> | number | null
+  hostPort?: Prisma.IntNullableFilter<"Deployment"> | number | null
   startedAt?: Prisma.DateTimeNullableFilter<"Deployment"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Deployment"> | Date | string | null
   duration?: Prisma.IntNullableFilter<"Deployment"> | number | null
@@ -303,6 +351,10 @@ export type DeploymentOrderByWithAggregationInput = {
   commitHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publicUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  containerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  containerName?: Prisma.SortOrderInput | Prisma.SortOrder
+  containerPort?: Prisma.SortOrderInput | Prisma.SortOrder
+  hostPort?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   duration?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -324,6 +376,10 @@ export type DeploymentScalarWhereWithAggregatesInput = {
   commitHash?: Prisma.StringWithAggregatesFilter<"Deployment"> | string
   status?: Prisma.EnumDeploymentStatusWithAggregatesFilter<"Deployment"> | $Enums.DeploymentStatus
   publicUrl?: Prisma.StringNullableWithAggregatesFilter<"Deployment"> | string | null
+  containerId?: Prisma.StringNullableWithAggregatesFilter<"Deployment"> | string | null
+  containerName?: Prisma.StringNullableWithAggregatesFilter<"Deployment"> | string | null
+  containerPort?: Prisma.IntNullableWithAggregatesFilter<"Deployment"> | number | null
+  hostPort?: Prisma.IntNullableWithAggregatesFilter<"Deployment"> | number | null
   startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Deployment"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Deployment"> | Date | string | null
   duration?: Prisma.IntNullableWithAggregatesFilter<"Deployment"> | number | null
@@ -335,6 +391,10 @@ export type DeploymentCreateInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -351,6 +411,10 @@ export type DeploymentUncheckedCreateInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -363,6 +427,10 @@ export type DeploymentUpdateInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -379,6 +447,10 @@ export type DeploymentUncheckedUpdateInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -393,6 +465,10 @@ export type DeploymentCreateManyInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -404,6 +480,10 @@ export type DeploymentUpdateManyMutationInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -417,6 +497,10 @@ export type DeploymentUncheckedUpdateManyInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -440,6 +524,10 @@ export type DeploymentCountOrderByAggregateInput = {
   commitHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publicUrl?: Prisma.SortOrder
+  containerId?: Prisma.SortOrder
+  containerName?: Prisma.SortOrder
+  containerPort?: Prisma.SortOrder
+  hostPort?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   duration?: Prisma.SortOrder
@@ -447,6 +535,8 @@ export type DeploymentCountOrderByAggregateInput = {
 }
 
 export type DeploymentAvgOrderByAggregateInput = {
+  containerPort?: Prisma.SortOrder
+  hostPort?: Prisma.SortOrder
   duration?: Prisma.SortOrder
 }
 
@@ -457,6 +547,10 @@ export type DeploymentMaxOrderByAggregateInput = {
   commitHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publicUrl?: Prisma.SortOrder
+  containerId?: Prisma.SortOrder
+  containerName?: Prisma.SortOrder
+  containerPort?: Prisma.SortOrder
+  hostPort?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   duration?: Prisma.SortOrder
@@ -470,6 +564,10 @@ export type DeploymentMinOrderByAggregateInput = {
   commitHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
   publicUrl?: Prisma.SortOrder
+  containerId?: Prisma.SortOrder
+  containerName?: Prisma.SortOrder
+  containerPort?: Prisma.SortOrder
+  hostPort?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   duration?: Prisma.SortOrder
@@ -477,6 +575,8 @@ export type DeploymentMinOrderByAggregateInput = {
 }
 
 export type DeploymentSumOrderByAggregateInput = {
+  containerPort?: Prisma.SortOrder
+  hostPort?: Prisma.SortOrder
   duration?: Prisma.SortOrder
 }
 
@@ -600,6 +700,10 @@ export type DeploymentCreateWithoutAgentInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -614,6 +718,10 @@ export type DeploymentUncheckedCreateWithoutAgentInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -657,6 +765,10 @@ export type DeploymentScalarWhereInput = {
   commitHash?: Prisma.StringFilter<"Deployment"> | string
   status?: Prisma.EnumDeploymentStatusFilter<"Deployment"> | $Enums.DeploymentStatus
   publicUrl?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerId?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerName?: Prisma.StringNullableFilter<"Deployment"> | string | null
+  containerPort?: Prisma.IntNullableFilter<"Deployment"> | number | null
+  hostPort?: Prisma.IntNullableFilter<"Deployment"> | number | null
   startedAt?: Prisma.DateTimeNullableFilter<"Deployment"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Deployment"> | Date | string | null
   duration?: Prisma.IntNullableFilter<"Deployment"> | number | null
@@ -668,6 +780,10 @@ export type DeploymentCreateWithoutProjectInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -682,6 +798,10 @@ export type DeploymentUncheckedCreateWithoutProjectInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -720,6 +840,10 @@ export type DeploymentCreateWithoutLogsInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -735,6 +859,10 @@ export type DeploymentUncheckedCreateWithoutLogsInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -762,6 +890,10 @@ export type DeploymentUpdateWithoutLogsInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -777,6 +909,10 @@ export type DeploymentUncheckedUpdateWithoutLogsInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -789,6 +925,10 @@ export type DeploymentCreateManyAgentInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -800,6 +940,10 @@ export type DeploymentUpdateWithoutAgentInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -814,6 +958,10 @@ export type DeploymentUncheckedUpdateWithoutAgentInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -827,6 +975,10 @@ export type DeploymentUncheckedUpdateManyWithoutAgentInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -839,6 +991,10 @@ export type DeploymentCreateManyProjectInput = {
   commitHash: string
   status?: $Enums.DeploymentStatus
   publicUrl?: string | null
+  containerId?: string | null
+  containerName?: string | null
+  containerPort?: number | null
+  hostPort?: number | null
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   duration?: number | null
@@ -850,6 +1006,10 @@ export type DeploymentUpdateWithoutProjectInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -864,6 +1024,10 @@ export type DeploymentUncheckedUpdateWithoutProjectInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -877,6 +1041,10 @@ export type DeploymentUncheckedUpdateManyWithoutProjectInput = {
   commitHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDeploymentStatusFieldUpdateOperationsInput | $Enums.DeploymentStatus
   publicUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  containerPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hostPort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -921,6 +1089,10 @@ export type DeploymentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   commitHash?: boolean
   status?: boolean
   publicUrl?: boolean
+  containerId?: boolean
+  containerName?: boolean
+  containerPort?: boolean
+  hostPort?: boolean
   startedAt?: boolean
   completedAt?: boolean
   duration?: boolean
@@ -938,6 +1110,10 @@ export type DeploymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   commitHash?: boolean
   status?: boolean
   publicUrl?: boolean
+  containerId?: boolean
+  containerName?: boolean
+  containerPort?: boolean
+  hostPort?: boolean
   startedAt?: boolean
   completedAt?: boolean
   duration?: boolean
@@ -953,6 +1129,10 @@ export type DeploymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   commitHash?: boolean
   status?: boolean
   publicUrl?: boolean
+  containerId?: boolean
+  containerName?: boolean
+  containerPort?: boolean
+  hostPort?: boolean
   startedAt?: boolean
   completedAt?: boolean
   duration?: boolean
@@ -968,13 +1148,17 @@ export type DeploymentSelectScalar = {
   commitHash?: boolean
   status?: boolean
   publicUrl?: boolean
+  containerId?: boolean
+  containerName?: boolean
+  containerPort?: boolean
+  hostPort?: boolean
   startedAt?: boolean
   completedAt?: boolean
   duration?: boolean
   createdAt?: boolean
 }
 
-export type DeploymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "agentId" | "commitHash" | "status" | "publicUrl" | "startedAt" | "completedAt" | "duration" | "createdAt", ExtArgs["result"]["deployment"]>
+export type DeploymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectId" | "agentId" | "commitHash" | "status" | "publicUrl" | "containerId" | "containerName" | "containerPort" | "hostPort" | "startedAt" | "completedAt" | "duration" | "createdAt", ExtArgs["result"]["deployment"]>
 export type DeploymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   agent?: boolean | Prisma.AgentDefaultArgs<ExtArgs>
@@ -1004,6 +1188,10 @@ export type $DeploymentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     commitHash: string
     status: $Enums.DeploymentStatus
     publicUrl: string | null
+    containerId: string | null
+    containerName: string | null
+    containerPort: number | null
+    hostPort: number | null
     startedAt: Date | null
     completedAt: Date | null
     duration: number | null
@@ -1440,6 +1628,10 @@ export interface DeploymentFieldRefs {
   readonly commitHash: Prisma.FieldRef<"Deployment", 'String'>
   readonly status: Prisma.FieldRef<"Deployment", 'DeploymentStatus'>
   readonly publicUrl: Prisma.FieldRef<"Deployment", 'String'>
+  readonly containerId: Prisma.FieldRef<"Deployment", 'String'>
+  readonly containerName: Prisma.FieldRef<"Deployment", 'String'>
+  readonly containerPort: Prisma.FieldRef<"Deployment", 'Int'>
+  readonly hostPort: Prisma.FieldRef<"Deployment", 'Int'>
   readonly startedAt: Prisma.FieldRef<"Deployment", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"Deployment", 'DateTime'>
   readonly duration: Prisma.FieldRef<"Deployment", 'Int'>

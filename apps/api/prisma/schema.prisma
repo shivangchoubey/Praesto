@@ -84,6 +84,10 @@ model Deployment{
     commitHash String 
     status  DeploymentStatus @default(PENDING)
     publicUrl  String?
+    containerId String?
+    containerName String?
+    containerPort Int?
+    hostPort      Int?
     startedAt  DateTime?
     completedAt DateTime?
     duration    Int?

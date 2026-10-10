@@ -257,7 +257,12 @@ export const getNextDeployment = async (req,res)=>{
 export const updateDeploymentStatus= async (req,res)=>{
     try{
         const {deploymentId}=req.params;
-        const {status}= req.body;
+        const {status,
+            containerId,
+            containerName,
+            containerPort,
+            hostPort
+        }= req.body ?? {};
 
         const allowedStatuses=[
             "BUILDING",
@@ -265,9 +270,43 @@ export const updateDeploymentStatus= async (req,res)=>{
             "FAILED",
             "OFFLINE"
         ];
-        if(!allowedStatuses){
+        if(!allowedStatuses.includes(status)){
             return res.status(400).json({
                 message:"Invalid deployment status"
+            });
+        }
+
+        for(const [name,value] of Object.entries({
+            containerPort,
+            hostPort
+        })){
+            if(value!==undefined &&
+                value!==null && (
+                    !Number.isInteger(value) ||
+                    value<1 || value>65535
+                )
+            ){
+                return res.status(400).json({
+                    message:`Invalid ${name}`
+                });
+            }  
+        }
+        if(
+            containerId!=undefined &&
+            containerId!==null &&
+            typeof containerId!="string"
+        ){
+            return res.status(400).json({
+                message:"Invalid container Id"
+            });
+        }
+
+        if(containerName!==undefined &&
+            containerName!==null &&
+            typeof containerName!=="string"
+        ){
+            return res.status(400).json({
+                message:"Invalid container name"
             });
         }
 
@@ -287,10 +326,26 @@ export const updateDeploymentStatus= async (req,res)=>{
         const data={
             status
         };
+        if(containerId!==undefined){
+            data.containerId=containerId;
+        }
+
+        if(containerName!==undefined){
+            data.containerName=containerName;
+        }
+
+        if(containerPort!==undefined){
+            data.containerPort=containerPort;
+        }
+
+        if(hostPort!==undefined){
+            data.hostPort=hostPort;
+        }
+
         if(status==="BUILDING" && !deployment.startedAt){
             data.startedAt=now;
         }
-        if(status==="FAILED"||status==="OFFLINE"){
+        if(status==="RUNNING"||status==="FAILED"||status==="OFFLINE"){
             data.completedAt=now;
             if(deployment.startedAt){
                 data.duration=Math.max(0,Math.floor(now.getTime()-deployment.startedAt.getTime())/1000);
@@ -311,6 +366,9 @@ export const updateDeploymentStatus= async (req,res)=>{
         });
     }catch(error){
         console.error("Failed to update deployment status",error);
+        if(res.headersSent){
+            return;
+        }
         return res.status(500).json({
             message:"Failed to update deployment status"
         });
