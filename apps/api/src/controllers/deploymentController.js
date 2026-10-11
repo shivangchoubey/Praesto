@@ -5,11 +5,55 @@ import{
     getLatestCommitSha
 } from "../services/githubService.js";
 
+const makeProjectSlug = (repositoryName) => {
+    const slug = String(repositoryName || "praesto-project")
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9-]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 45);
+
+    return slug || "praesto-project";
+};
+
+const ensureProjectPublicAddress = async (project) => {
+    if (project.publicSlug && project.publicUrl) {
+        return project;
+    }
+
+    const baseSlug =
+        project.publicSlug || makeProjectSlug(project.repositoryName);
+
+    const saveAddress = (slug) =>
+        prisma.project.update({
+            where: { id: project.id },
+            data: {
+                publicSlug: slug,
+                publicUrl: `https://${slug}.shares.zrok.io`
+            }
+        });
+
+    try {
+        return await saveAddress(baseSlug);
+    } catch (error) {
+        if (error.code !== "P2002" || project.publicSlug) {
+            throw error;
+        }
+
+        // If another project already owns this hostname,
+        // generate a deterministic, project-specific suffix.
+        const uniqueSlug =
+            `${baseSlug.slice(0, 35)}-${project.id.slice(0, 8)}`;
+
+        return await saveAddress(uniqueSlug);
+    }
+};
 export const createDeployment = async(req,res) =>{
     try{
         const {id: projectId} = req.params;
         const userId = req.user.userId;
-        const project = await prisma.project.findFirst({
+        let project = await prisma.project.findFirst({
             where:{
                 id:projectId,
                 userId
@@ -20,6 +64,8 @@ export const createDeployment = async(req,res) =>{
                 message:"Project not found"
             })
         }
+
+        project = await ensureProjectPublicAddress(project);
 
         const agent = await prisma.agent.findUnique({
             where:{
@@ -74,12 +120,18 @@ export const createDeployment = async(req,res) =>{
                 projectId,
                 agentId:agent.id,
                 commitHash,
-                status:"PENDING"
+                status:"PENDING",
+                publicUrl:project.publicUrl
             }
         });
 
         return res.status(201).json({
             message:"Deployment created successfully",
+            project:{
+                id:project.id,
+                publicSlug:project.publicSlug,
+                publicUrl:project.publicUrl
+            },
             deployment
         });
 

@@ -1018,6 +1018,8 @@ export const ProjectScalarFieldEnum = {
   visiblity: 'visiblity',
   installationId: 'installationId',
   githubRepositoryId: 'githubRepositoryId',
+  publicSlug: 'publicSlug',
+  publicUrl: 'publicUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

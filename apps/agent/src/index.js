@@ -12,7 +12,16 @@ import {
     stopAndRemoveContainer,
     streamContainerLogs
 } from "./services/containerService.js";
+import { createProjectRouter } from "./services/routerService.js";
+const ROUTER_HOST = "127.0.0.1";
+const ROUTER_PORT = Number(
+    process.env.PRAESTO_ROUTER_PORT || 4310
+);
 
+const projectRouter = createProjectRouter({
+    host: ROUTER_HOST,
+    port: ROUTER_PORT
+});
 const API_URL =
     process.env.PRAESTO_API_URL || "http://localhost:5000";
 
@@ -128,6 +137,50 @@ const checkForDeployment = async (agentToken) => {
         return null;
     }
 };
+
+
+const restoreProjectRoutes = async (agentToken) => {
+    const response = await fetch(`${API_URL}/agents/routes`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${agentToken}`
+        }
+    });
+
+    if (!response.ok) {
+        const body = await response.text();
+
+        throw new Error(
+            `Failed to restore project routes (${response.status}): ${body}`
+        );
+    }
+
+    const data = await response.json();
+    const routes = data.routes ?? [];
+console.log(
+    "[Praesto Router] API returned routes:",
+    JSON.stringify(routes, null, 2)
+);
+
+
+    for (const route of routes) {
+        projectRouter.setRoute(
+            route.publicSlug,
+            route.hostPort
+        );
+
+        console.log(
+            `[Praesto Router] Restored ${route.publicSlug} -> 127.0.0.1:${route.hostPort}`
+        );
+    }
+
+    console.log(
+        `[Praesto Router] Restored ${routes.length} project route(s)`
+    );
+
+    return routes;
+};
+
 
 const sendDeploymentLog = async (
     agentToken,
@@ -249,6 +302,8 @@ const pollForDeployment = async (agentToken) => {
     let deploymentData = null;
     let logWriter = null;
     let runtime = null;
+    let previousRoutePort = null;
+    let routeChanged = false;
 
     try {
         deploymentData = await checkForDeployment(agentToken);
@@ -349,6 +404,28 @@ const pollForDeployment = async (agentToken) => {
 
         await logWriter.flush();
 
+
+    const publicSlug = deploymentData.project.publicSlug;
+
+    if (!publicSlug) {
+        throw new Error(
+            "Project publicSlug is missing; cannot configure public routing"
+        );
+    }
+
+    previousRoutePort = projectRouter.setRoute(
+        publicSlug,
+        runtime.hostPort
+    );
+
+    routeChanged = true;
+
+    await logWriter.write(
+        "INFO",
+        `Public route configured: ${publicSlug} -> 127.0.0.1:${runtime.hostPort}`
+    );
+
+
         // 5. Persist the actual container ID and port details with
         // the successful deployment status.
         await updateDeploymentStatus(
@@ -383,6 +460,22 @@ const pollForDeployment = async (agentToken) => {
             "Deployment execution failed:",
             error.message
         );
+
+
+    if (routeChanged && deploymentData?.project?.publicSlug) {
+        const slug = deploymentData.project.publicSlug;
+
+        if (previousRoutePort === null) {
+            projectRouter.removeRoute(slug);
+        } else {
+            projectRouter.setRoute(slug, previousRoutePort);
+        }
+
+        console.log(
+            `[Praesto Router] Restored previous route for ${slug}`
+        );
+    }
+
 
         if (logWriter) {
             await logWriter.write("ERROR", error.message);
@@ -459,6 +552,21 @@ if (agentData.agentId && agentData.token) {
 
     console.log("Agent Registered successfully", agent.id);
 }
+await projectRouter.listen();
+
+console.log(
+    `Praesto Router listening at http://${ROUTER_HOST}:${ROUTER_PORT}`
+);
+
+try {
+    await restoreProjectRoutes(agent.token);
+} catch (error) {
+    console.error(
+        "Could not restore project routes at startup:",
+        error.message
+    );
+}
+
 
 await sendHeartbeat(agent.token);
 

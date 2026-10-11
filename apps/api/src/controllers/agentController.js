@@ -238,7 +238,9 @@ export const getNextDeployment = async (req,res)=>{
                 repositoryName:deployment.project.repositoryName,
                 defaultBranch:deployment.project.defaultBranch,
                 framework:deployment.project.framework,
-                environmentVariables:deployment.project.environmentVariables
+                environmentVariables:deployment.project.environmentVariables,
+                publicSlug:deployment.project.publicSlug,
+                publicUrl:deployment.project.publicUrl
             },
             github:{
                 installationToken:installationToken.token
@@ -434,6 +436,58 @@ export const createDeploymentLog = async (req, res) => {
 
         return res.status(500).json({
             message: "Failed to create deployment log"
+        });
+    }
+};
+
+
+export const getAgentProjectRoutes = async (req, res) => {
+    try {
+        const userId = req.agent.userId;
+
+        const projects = await prisma.project.findMany({
+            where: {
+                userId,
+                publicSlug: { not: null },
+                publicUrl: { not: null }
+            },
+            select: {
+                id: true,
+                publicSlug: true,
+                publicUrl: true,
+                deployments: {
+                    where: {
+                        status: "RUNNING",
+                        hostPort: { not: null }
+                    },
+                    orderBy: {
+                        createdAt: "desc"
+                    },
+                    take: 1,
+                    select: {
+                        id: true,
+                        hostPort: true
+                    }
+                }
+            }
+        });
+
+        const routes = projects
+            .filter((project) => project.deployments.length > 0)
+            .map((project) => ({
+                projectId: project.id,
+                publicSlug: project.publicSlug,
+                publicUrl: project.publicUrl,
+                deploymentId: project.deployments[0].id,
+                hostPort: project.deployments[0].hostPort
+            }));
+
+        return res.json({ routes });
+    } catch (error) {
+        console.error("Failed to fetch Agent project routes", error);
+
+        return res.status(500).json({
+            message: "Failed to fetch Agent project routes"
         });
     }
 };
