@@ -13,6 +13,9 @@ import {
     streamContainerLogs
 } from "./services/containerService.js";
 import { createProjectRouter } from "./services/routerService.js";
+import {
+    ensureZrokPublicShare
+} from "./services/zrokService.js";
 const ROUTER_HOST = "127.0.0.1";
 const ROUTER_PORT = Number(
     process.env.PRAESTO_ROUTER_PORT || 4310
@@ -420,6 +423,16 @@ const pollForDeployment = async (agentToken) => {
 
     routeChanged = true;
 
+    const publicUrl = await ensureZrokPublicShare({
+    slug: publicSlug,
+    targetUrl: `http://${ROUTER_HOST}:${ROUTER_PORT}/p/${publicSlug}`
+});
+
+await logWriter.write(
+    "INFO",
+    `Zrok public share ready: ${publicUrl}`
+);
+
     await logWriter.write(
         "INFO",
         `Public route configured: ${publicSlug} -> 127.0.0.1:${runtime.hostPort}`
@@ -559,10 +572,21 @@ console.log(
 );
 
 try {
-    await restoreProjectRoutes(agent.token);
+    const routes = await restoreProjectRoutes(agent.token);
+
+    for (const route of routes) {
+        const publicUrl = await ensureZrokPublicShare({
+            slug: route.publicSlug,
+            targetUrl: `http://${ROUTER_HOST}:${ROUTER_PORT}/p/${route.publicSlug}`
+        });
+
+        console.log(
+            `[Zrok] Public URL ready: ${publicUrl}`
+        );
+    }
 } catch (error) {
     console.error(
-        "Could not restore project routes at startup:",
+        "[Zrok] Startup setup failed:",
         error.message
     );
 }
